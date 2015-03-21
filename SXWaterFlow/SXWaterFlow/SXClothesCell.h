@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class SXModels;
 @interface SXClothesCell : UICollectionViewCell
-
+@property (nonatomic, strong) SXModels *model;
 @end

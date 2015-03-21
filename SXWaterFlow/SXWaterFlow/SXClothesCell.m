@@ -7,12 +7,20 @@
 //
 
 #import "SXClothesCell.h"
+#import "SXModels.h"
+
+@interface SXClothesCell()
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UILabel *priceLabel;
+@end
 
 @implementation SXClothesCell
 
-- (void)awakeFromNib {
-    // Initialization code
+- (void)setModel:(SXModels *)model
+{
+    _model = model;
+    self.priceLabel.text = model.price;
+    
 }
-
 
 @end

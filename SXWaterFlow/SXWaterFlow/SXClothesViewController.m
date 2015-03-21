@@ -7,92 +7,65 @@
 //
 
 #import "SXClothesViewController.h"
+#import "SXWaterflowLayout.h"
+#import "SXModels.h"
+#import "SXClothesCell.h"
 
-@interface SXClothesViewController ()
-
+@interface SXClothesViewController () <SXWaterflowLayoutDelegate>
+@property (nonatomic, strong) NSMutableArray *allClothes;
 @end
 
 @implementation SXClothesViewController
 
-static NSString * const reuseIdentifier = @"Cell";
+- (NSMutableArray *)allClothes
+{
+    if (!_allClothes) {
+        _allClothes = [[NSMutableArray alloc] init];
+    }
+    return _allClothes;
+}
+
+static NSString * const reuseIdentifier = @"clothes";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
+    // 切换布局
+    SXWaterflowLayout *layout = [[SXWaterflowLayout alloc] init];
+    layout.delegate = self;
+    self.collectionView.collectionViewLayout = layout;
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     
-    // Register cell classes
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    __weak typeof(self) weakSelf = self;
     
-    // Do any additional setup after loading the view.
+    // 发送请求给服务器（加载数据，这里用的是plist假数据）
+    NSArray *clothesArray = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"clothes.plist" ofType:nil]];
+                             
+    [weakSelf.allClothes insertObjects:clothesArray atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, clothesArray.count)]];
+    [weakSelf.collectionView reloadData];
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - <SXWaterflowLayoutDelegate>
+- (CGFloat)waterflowLayout:(SXWaterflowLayout *)layout heightForItemAtIndexPath:(NSIndexPath *)indexPath withItemWidth:(CGFloat)width {
+    SXModels *model = self.allClothes[indexPath.item];
+    return model.h * width / model.w;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSUInteger)columnsCountInWaterflowLayout:(SXWaterflowLayout *)layout
+{
+    return 4;
 }
-*/
 
 #pragma mark <UICollectionViewDataSource>
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-#warning Incomplete method implementation -- Return the number of sections
-    return 0;
-}
-
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-#warning Incomplete method implementation -- Return the number of items in the section
-    return 0;
+    return self.allClothes.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell
-    
+    SXClothesCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    cell.model = self.allClothes[indexPath.item];
     return cell;
 }
-
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end
