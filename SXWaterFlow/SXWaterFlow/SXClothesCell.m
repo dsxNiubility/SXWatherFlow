@@ -8,6 +8,7 @@
 
 #import "SXClothesCell.h"
 #import "SXModels.h"
+#import <UIImageView+WebCache.h>
 
 @interface SXClothesCell()
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -16,9 +17,17 @@
 
 @implementation SXClothesCell
 
+- (void)awakeFromNib{
+    self.imageView.layer.cornerRadius = 10;
+    self.imageView.clipsToBounds = YES;
+    
+    self.priceLabel.layer.cornerRadius = 10;
+    self.priceLabel.clipsToBounds = YES;
+}
+
 - (void)setModel:(SXModels *)model
-{
-    _model = model;
+{  _model = model;
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:[UIImage imageNamed:@"loading"]];
     self.priceLabel.text = model.price;
     
 }

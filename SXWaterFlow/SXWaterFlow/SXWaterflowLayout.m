@@ -16,7 +16,7 @@ static const CGFloat SXDefaultRowMargin = 10;
 /** 每一列之间的间距 */
 static const CGFloat SXDefaultColumnMargin = 10;
 /** 每一列之间的间距 top, left, bottom, right */
-static const UIEdgeInsets SXDefaultInsets = {10, 10, 10, 10};
+static const UIEdgeInsets SXDefaultInsets = {20, 10, 10, 10};
 /** 默认的列数 */
 static const int SXDefaultColumsCount = 3;
 
