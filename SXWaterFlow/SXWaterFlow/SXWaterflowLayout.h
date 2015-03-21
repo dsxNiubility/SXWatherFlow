@@ -8,6 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SXWaterflowLayout : UICollectionViewLayout
+@class SXWaterflowLayout;
 
+@protocol SXWaterflowLayoutDelegate <NSObject>
+@required
+/**
+ * 返回indexPath位置cell的高度
+ */
+- (CGFloat)waterflowLayout:(SXWaterflowLayout *)layout heightForItemAtIndexPath:(NSIndexPath *)indexPath withItemWidth:(CGFloat)width;
+
+@optional
+- (CGFloat)rowMarginInWaterflowLayout:(SXWaterflowLayout *)layout;
+- (CGFloat)columnMarginInWaterflowLayout:(SXWaterflowLayout *)layout;
+- (NSUInteger)columnsCountInWaterflowLayout:(SXWaterflowLayout *)layout;
+- (UIEdgeInsets)insetsInWaterflowLayout:(SXWaterflowLayout *)layout;
+@end
+
+@interface SXWaterflowLayout : UICollectionViewLayout
+@property (nonatomic, weak) id<SXWaterflowLayoutDelegate> delegate;
 @end

@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 shangxianDante. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface SXModels : NSObject
 
